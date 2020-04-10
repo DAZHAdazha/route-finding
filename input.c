@@ -1,32 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"datastructure.h"
-int main(void){
+
+int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
     FILE *fp = NULL;
     char buff[650];
     fp = fopen("./Final_Map.map", "r");
-
-    // create nodelist
-    Nodelist* nodeHead=(Nodelist*)malloc(sizeof(Nodelist));
-    nodeHead->next=NULL;
-	Nodelist* pNode=nodeHead;
-    
-    // create waylist
-    WayList* wayHead=(WayList*)malloc(sizeof(WayList));
-    wayHead->next=NULL;
-	WayList* pWay=wayHead;
-
-    // create linklist
-    LinkList* linkHead=(LinkList*)malloc(sizeof(LinkList));
-    linkHead->next=NULL;
-	LinkList* pLink=linkHead;
-
-    // create geomlist
-    GeomList* geomHead=(GeomList*)malloc(sizeof(GeomList));
-    geomHead->next=NULL;
-	GeomList* pGeom=geomHead;
-
-
     while(1){
         if(feof(fp)) 
             break;  
@@ -114,7 +93,6 @@ int main(void){
             tempLink.land=atof(tempStr);
 
             //POI
-
 
 
             TempLink->currentLink=tempLink;
@@ -251,62 +229,61 @@ int main(void){
             
             pGeom->next=TempGeom; 
             pGeom=pGeom->next;
-        }
-            
-
+        }  
     }
-    //test for go through all the <node>
-
-    // nodeHead=nodeHead->next;
-    // while(nodeHead!=NULL){ 
-    //     printf("<node> id:%d,lon:%lf,lat:%lf\n",nodeHead->spot.id,nodeHead->spot.lon,nodeHead->spot.lat);
-    //     nodeHead=nodeHead->next;
-    // }
-
-    //test for go through all the <link>
-
-    // linkHead=linkHead->next;
-    // while(linkHead!=NULL){ 
-    //     printf("<link> id:%d,nodex:%d,nodey:%d,way:%d,length:%lf,veg:%lf,arch:%lf,land:%lf\n",linkHead->currentLink.id,linkHead->currentLink.nodex,linkHead->currentLink.nodey,linkHead->currentLink.way,linkHead->currentLink.length,linkHead->currentLink.veg,linkHead->currentLink.arch,linkHead->currentLink.land);
-    //     linkHead=linkHead->next;
-    // }
-
-
-
-    // test for go through all the <way>
-
-    // wayHead=wayHead->next;
-    // while(wayHead!=NULL){ 
-    //     printf("<wayHead> :%d\n",wayHead->currentWay.id);
-    //     printf("<innerbegin>\n"); 
-    //     wayHead->currentWay.head=wayHead->currentWay.head->next;
-    //     while(wayHead->currentWay.head!=NULL){
-    //         printf("<way> :%d\n",wayHead->currentWay.head->spot.id);
-    //         wayHead->currentWay.head=wayHead->currentWay.head->next;
-    //     }
-    //     printf("<innerend>\n");
-    //     wayHead=wayHead->next;
-    // }
-
-
-    // test for go through all the <geom>
-
-    // geomHead=geomHead->next;
-    // while(geomHead!=NULL){ 
-    //     printf("<geomHead> :%d\n",geomHead->currentGeom.id);
-    //     printf("<innerbegin>\n"); 
-    //     geomHead->currentGeom.head=geomHead->currentGeom.head->next;
-    //     while(geomHead->currentGeom.head!=NULL){
-    //         printf("<geom> :%d\n",geomHead->currentGeom.head->spot.id);
-    //         geomHead->currentGeom.head=geomHead->currentGeom.head->next;
-    //     }
-    //     printf("<innerend>\n");
-    //     geomHead=geomHead->next;
-    // }
-
     fclose(fp);
-
     return 0;
 }
 
+   //test for go through all the <node>
+    void showNode(Nodelist* nodeHead){
+
+        nodeHead=nodeHead->next;
+        while(nodeHead!=NULL){ 
+            printf("<node> id:%d,lon:%lf,lat:%lf\n",nodeHead->spot.id,nodeHead->spot.lon,nodeHead->spot.lat);
+            nodeHead=nodeHead->next;
+        }
+    }
+
+    //test for go through all the <link>
+    void showLink(LinkList* linkHead){
+        linkHead=linkHead->next;
+        while(linkHead!=NULL){ 
+            printf("<link> id:%d,nodex:%d,nodey:%d,way:%d,length:%lf,veg:%lf,arch:%lf,land:%lf\n",linkHead->currentLink.id,linkHead->currentLink.nodex,linkHead->currentLink.nodey,linkHead->currentLink.way,linkHead->currentLink.length,linkHead->currentLink.veg,linkHead->currentLink.arch,linkHead->currentLink.land);
+            linkHead=linkHead->next;
+        }
+    }
+
+    // test for go through all the <way>
+    void showWay(WayList* wayHead){
+        wayHead=wayHead->next;
+        while(wayHead!=NULL){ 
+            printf("<wayHead> :%d\n",wayHead->currentWay.id);
+            printf("<innerbegin>\n"); 
+            wayHead->currentWay.head=wayHead->currentWay.head->next;
+            while(wayHead->currentWay.head!=NULL){
+                printf("<way> :%d\n",wayHead->currentWay.head->spot.id);
+                wayHead->currentWay.head=wayHead->currentWay.head->next;
+            }
+            printf("<innerend>\n");
+            wayHead=wayHead->next;
+        }
+    }
+    
+  // test for go through all the <geom>
+    void showGeom(GeomList* geomHead){
+        geomHead=geomHead->next;
+        while(geomHead!=NULL){ 
+            printf("<geomHead> :%d\n",geomHead->currentGeom.id);
+            printf("<innerbegin>\n"); 
+            geomHead->currentGeom.head=geomHead->currentGeom.head->next;
+            while(geomHead->currentGeom.head!=NULL){
+                printf("<geom> :%d\n",geomHead->currentGeom.head->spot.id);
+                geomHead->currentGeom.head=geomHead->currentGeom.head->next;
+            }
+            printf("<innerend>\n");
+            geomHead=geomHead->next;
+        }
+    }
+    
     
