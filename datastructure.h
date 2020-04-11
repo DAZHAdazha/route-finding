@@ -1,4 +1,5 @@
-
+#ifndef mark	// use macro to avoid repeating declaration
+#define mark 1
 typedef struct node{
     long id;
     double lat,lon;
@@ -7,7 +8,7 @@ typedef struct node{
 typedef struct nodelist{
     Node spot;
     struct nodelist* next;
-}Nodelist;
+}NodeList;
 
 typedef struct link{
     long id,nodex,nodey,way;
@@ -17,7 +18,7 @@ typedef struct link{
 
 typedef struct way{
     long id;
-    Nodelist* head;
+    NodeList* head;
 }Way;
 
 typedef struct wayList{
@@ -32,7 +33,7 @@ typedef struct linkList{
 
 typedef struct geom{
     long id;
-    Nodelist* head;
+    NodeList* head;
 }Geom;
 
 typedef struct geomList{
@@ -40,3 +41,4 @@ typedef struct geomList{
     struct GeomList* next;
 }GeomList;
 
+#endif

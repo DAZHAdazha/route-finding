@@ -1,13 +1,14 @@
 #include<stdio.h>
 #include"input.c"
+#include"visulization.c"
 int main(void){
 
     //handling the input data
 
     // create nodelist
-    Nodelist* nodeHead=(Nodelist*)malloc(sizeof(Nodelist));
+    NodeList* nodeHead=(NodeList*)malloc(sizeof(NodeList));
     nodeHead->next=NULL;
-	Nodelist* pNode=nodeHead;
+	NodeList* pNode=nodeHead;
     
     // create waylist
     WayList* wayHead=(WayList*)malloc(sizeof(WayList));
@@ -24,10 +25,16 @@ int main(void){
     geomHead->next=NULL;
 	GeomList* pGeom=geomHead;
 
+    // initialize and storing the input from the file
     input(pNode,pWay,pLink,pGeom);
-    // showNode(pNode);
+
+    // show the original map with given data
+    showOriginalMap(pNode,pLink);
+    
+    //showNode(pNode);
     // showWay(pWay);
     // showLink(pLink);
     // showGeom(pGeom);
+    
     return 0;
 }

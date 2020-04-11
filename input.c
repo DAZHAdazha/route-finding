@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include"datastructure.h"
 
-int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
+int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
     FILE *fp = NULL;
     char buff[650];
     fp = fopen("./Final_Map.map", "r");
@@ -14,7 +14,7 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         if(strstr(buff,"<node")!=NULL){
             Node tempNode;
             char tempStr[25];
-            Nodelist* TempNode=(Nodelist*)malloc(sizeof(Nodelist));
+            NodeList* TempNode=(NodeList*)malloc(sizeof(NodeList));
             TempNode->next=NULL;
             // get the id of current node
             int length = strlen(strstr(buff,"id="))-strlen(strstr(buff,"lat="))-4;
@@ -86,15 +86,6 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             tempStr[length]='\0';
             tempLink.arch=atof(tempStr);
 
-            // get the land of current link
-            length = strlen(strstr(buff,"land="))-strlen(strstr(buff,"POI="))-5;
-            strncpy(tempStr,strstr(buff,"land=")+5,length);
-            tempStr[length]='\0';
-            tempLink.land=atof(tempStr);
-
-            //POI
-
-
             TempLink->currentLink=tempLink;
             pLink->next=TempLink; 
             pLink=pLink->next;
@@ -108,9 +99,9 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             Way tempWay;
             char tempStr[25];
 
-            Nodelist* wayNodeList=(Nodelist*)malloc(sizeof(Nodelist));
+            NodeList* wayNodeList=(NodeList*)malloc(sizeof(NodeList));
             wayNodeList->next=NULL;
-            Nodelist* pointer=wayNodeList;
+            NodeList* pointer=wayNodeList;
             
             // get the id of current way
             int length = strlen(strstr(buff,"id="))-strlen(strstr(buff,"node="))-3;
@@ -128,7 +119,7 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             while(1){
                 if(strstr(iterChar+1,"node=")!=NULL){
 
-                    Nodelist* temp=(Nodelist*)malloc(sizeof(Nodelist));
+                    NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
                     temp->next=NULL;
 
                     strcpy(tempChar,iterChar);
@@ -147,7 +138,7 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
                     strncpy(tempResult,iterChar,strlen(iterChar)-strlen(strstr(iterChar,"/way"))-1);
                     tempResult[strlen(iterChar)-strlen(strstr(iterChar,"/way"))-1]='\0';
 
-                    Nodelist* temp=(Nodelist*)malloc(sizeof(Nodelist));
+                    NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
                     temp->next=NULL;
                     Node tempNode;
                     tempNode.id=atoi(tempResult+5);
@@ -180,9 +171,9 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
 
             //get the nodelist of current geom
 
-            Nodelist* geomNodeList=(Nodelist*)malloc(sizeof(Nodelist));
+            NodeList* geomNodeList=(NodeList*)malloc(sizeof(NodeList));
             geomNodeList->next=NULL;
-            Nodelist* pointer=geomNodeList;
+            NodeList* pointer=geomNodeList;
             char iterChar[650];
             char tempChar[650];
             char tempResult[25];
@@ -193,7 +184,7 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             while(1){
                 if(strstr(iterChar+1,"node=")!=NULL){
 
-                    Nodelist* temp=(Nodelist*)malloc(sizeof(Nodelist));
+                    NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
                     temp->next=NULL;
 
                     strcpy(tempChar,iterChar);
@@ -213,7 +204,7 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
                     strncpy(tempResult,iterChar,strlen(iterChar)-strlen(strstr(iterChar,"/geom"))-1);
                     tempResult[strlen(iterChar)-strlen(strstr(iterChar,"/geom"))-1]='\0';
                     
-                    Nodelist* temp=(Nodelist*)malloc(sizeof(Nodelist));
+                    NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
                     temp->next=NULL;
                     Node tempNode;
                     tempNode.id=atoi(tempResult+5);
@@ -236,7 +227,7 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
 }
 
    //test for go through all the <node>
-    void showNode(Nodelist* nodeHead){
+    void showNode(NodeList* nodeHead){
 
         nodeHead=nodeHead->next;
         while(nodeHead!=NULL){ 
@@ -249,7 +240,7 @@ int input(Nodelist* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
     void showLink(LinkList* linkHead){
         linkHead=linkHead->next;
         while(linkHead!=NULL){ 
-            printf("<link> id:%d,nodex:%d,nodey:%d,way:%d,length:%lf,veg:%lf,arch:%lf,land:%lf\n",linkHead->currentLink.id,linkHead->currentLink.nodex,linkHead->currentLink.nodey,linkHead->currentLink.way,linkHead->currentLink.length,linkHead->currentLink.veg,linkHead->currentLink.arch,linkHead->currentLink.land);
+            printf("<link> id:%d,nodex:%d,nodey:%d,way:%d,length:%lf,veg:%lf,arch:%lf\n",linkHead->currentLink.id,linkHead->currentLink.nodex,linkHead->currentLink.nodey,linkHead->currentLink.way,linkHead->currentLink.length,linkHead->currentLink.veg,linkHead->currentLink.arch);
             linkHead=linkHead->next;
         }
     }

@@ -1,0 +1,38 @@
+The data structure can be built from <link> and <node> data
+
+in the file.
+
+<node id= lat= lon= >
+
+Node is a point with (x,y) coordinates (lon,lat) which means longitude latitude.
+
+id is an assigned integer that identifies the node. Not all nodes are part of the
+
+path network, but that does not matter.
+
+
+<link id= node= node= >
+
+Link is a segment of a path defined by nodes at each end. The node id's given
+
+are used to identify the coordinates from the <node > structure.
+
+Other tags:
+
+veg= define whether there is vegetation on that link, eg. trees, flowers, grass
+
+arch= defines whether there is important architecture on that path
+
+length= defined the path length that could be a curved path and longer than              the straight-line distance between the 2 points
+
+
+Other data is defined in that file, but can be ignored for the project.
+
+<way> is defined as a set of links that make up a path.
+
+<geom> is a set of nodes that define a shape, for example a building.
+
+
+Output could be a set of points that define a path that can be
+
+visualised on a map.
