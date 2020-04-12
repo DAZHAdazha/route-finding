@@ -25,16 +25,25 @@ int main(void){
     geomHead->next=NULL;
 	GeomList* pGeom=geomHead;
 
+    // create adjacentlist
+    AdjacencyList* adjacentHead=(AdjacencyList*)malloc(sizeof(AdjacencyList));
+    adjacentHead->next=NULL;
+    AdjacencyList* pAdjacent=adjacentHead;
+
+
     // initialize and storing the input from the file
     input(pNode,pWay,pLink,pGeom);
+    
+    adjacent(pNode,pLink,pAdjacent);
 
     // show the original map with given data
-    showOriginalMap(pNode,pLink);
+    //showOriginalMap(pNode,pLink);
     
-    //showNode(pNode);
+    // showNode(pNode);
     // showWay(pWay);
     // showLink(pLink);
     // showGeom(pGeom);
-    
+    // showAdjacentList(pAdjacent);
+
     return 0;
 }

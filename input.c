@@ -249,14 +249,13 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
     void showWay(WayList* wayHead){
         wayHead=wayHead->next;
         while(wayHead!=NULL){ 
-            printf("<wayHead> :%d\n",wayHead->currentWay.id);
-            printf("<innerbegin>\n"); 
+            printf("<wayID> :%d\n",wayHead->currentWay.id);
             wayHead->currentWay.head=wayHead->currentWay.head->next;
             while(wayHead->currentWay.head!=NULL){
-                printf("<way> :%d\n",wayHead->currentWay.head->spot.id);
+                printf("<wayNode> :%d\n",wayHead->currentWay.head->spot.id);
                 wayHead->currentWay.head=wayHead->currentWay.head->next;
             }
-            printf("<innerend>\n");
+            printf("\n");
             wayHead=wayHead->next;
         }
     }
@@ -276,5 +275,105 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             geomHead=geomHead->next;
         }
     }
+
+
+//  test for go through all the adjacencylist
+    void showAdjacentList(AdjacencyList* adjacentHead){
+        AdjacencyList* pAdjacent=adjacentHead;
+        pAdjacent=pAdjacent->next;
+        while(pAdjacent!=NULL){ 
+            printf("<pAdjacent id> :%d\n",pAdjacent->spot.id);
+            pAdjacent->head=pAdjacent->head->next;
+            while(pAdjacent->head!=NULL){
+                printf("%d ",pAdjacent->head->spot.id);
+                pAdjacent->head=pAdjacent->head->next;
+            }
+            printf("\n");
+            pAdjacent=pAdjacent->next;
+        }
+    }
+
+
+    Node getNode(long id,NodeList* nodeHead){
+        nodeHead=nodeHead->next;
+        while(nodeHead!=NULL){ 
+            if(id==nodeHead->spot.id){
+                return nodeHead->spot;
+            }
+            nodeHead=nodeHead->next;
+        }
+    }
+
+
+void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
+
+    AdjacencyList* pAdjacent=adjacentHead;
+
+     pNode=pNode->next;
+        while(pNode!=NULL){
+
+            long id=pNode->spot.id;
+
+            AdjacencyList* TempAdjacent=(AdjacencyList*)malloc(sizeof(AdjacencyList));
+            TempAdjacent->next=NULL;
+
+            NodeList* adjacentNodeList=(NodeList*)malloc(sizeof(NodeList));
+            adjacentNodeList->next=NULL;
+            NodeList* pointer=adjacentNodeList;
+
+            Node tempNode;
+            tempNode.id=id;
+            TempAdjacent->spot=tempNode;
+
+
+            LinkList* pLink=linkHead;
+            pLink=pLink->next;
+            // printf("%d:",id);
+            while(pLink!=NULL){ 
+                if(pLink->currentLink.nodex==id){
+                    // printf("%d ",pLink->currentLink.nodey);
+
+                    NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
+                    temp->next=NULL;
+                    
+                    Node tempNode;
+
+                    tempNode.id=pLink->currentLink.nodey;
+
+                    temp->spot=tempNode;
+                    pointer->next=temp; 
+                    pointer=pointer->next;
+
+                }
+                    
+                else if(pLink->currentLink.nodey==id){
+                    // printf("%d ",pLink->currentLink.nodex);
+
+                    NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
+                    temp->next=NULL;
+
+                    Node tempNode;
+
+                    tempNode.id=pLink->currentLink.nodex;
+
+                    temp->spot=tempNode;
+                    pointer->next=temp; 
+                    pointer=pointer->next;
+                }
+                
+                pLink=pLink->next;
+            }
+            //  printf("\n");
+
+            TempAdjacent->head=adjacentNodeList;
+            pAdjacent->next=TempAdjacent; 
+            pAdjacent=pAdjacent->next;
+
+            pNode=pNode->next;
+        }
+}
+
+
+
     
     

@@ -4,8 +4,8 @@
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = input.o main.o
-LINKOBJ  = input.o main.o
+OBJ      = input.o main.o visulization.o
+LINKOBJ  = input.o main.o visulization.o
 LIBS     = -L"D:/Dev-Cpp/MinGW64/lib" -L"D:/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g3
 INCS     = -I"D:/Dev-Cpp/MinGW64/include" -I"D:/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include"
 CXXINCS  = -I"D:/Dev-Cpp/MinGW64/include" -I"D:/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include"
@@ -29,3 +29,6 @@ input.o: input.c
 
 main.o: main.c
 	$(CC) -c main.c -o main.o $(CFLAGS)
+
+visulization.o: visulization.c
+	$(CC) -c visulization.c -o visulization.o $(CFLAGS)

@@ -38,7 +38,13 @@ typedef struct geom{
 
 typedef struct geomList{
     Geom currentGeom;
-    struct GeomList* next;
+    struct geomList* next;
 }GeomList;
+
+typedef struct adjacencyList{
+    Node spot;
+    NodeList* head;
+    struct adjacencyList* next;
+}AdjacencyList;
 
 #endif
