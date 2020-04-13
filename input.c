@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<math.h>
 #include"datastructure.h"
 
 int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
+    long nodeAmount=0,wayAmount=0,linkAmount=0,geomAmount=0;
     FILE *fp = NULL;
     char buff[650];
     fp = fopen("./Final_Map.map", "r");
@@ -12,6 +14,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         
         fgets(buff,650,(FILE*)fp);
         if(strstr(buff,"<node")!=NULL){
+            nodeAmount++;
             Node tempNode;
             char tempStr[25];
             NodeList* TempNode=(NodeList*)malloc(sizeof(NodeList));
@@ -38,6 +41,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         }
             
         if(strstr(buff,"<link")!=NULL){
+            linkAmount++;
             LinkList* TempLink=(LinkList*)malloc(sizeof(LinkList));
             TempLink->next=NULL;
 
@@ -92,7 +96,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         }
             
         if(strstr(buff,"<way")!=NULL){
-
+            wayAmount++;
             WayList* TempWay=(WayList*)malloc(sizeof(WayList));
             TempWay->next=NULL;
 
@@ -157,7 +161,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         }
             
         if(strstr(buff,"<geom")!=NULL){
-            
+            geomAmount++;
             GeomList* TempGeom=(GeomList*)malloc(sizeof(GeomList));
             TempGeom->next=NULL;
 
@@ -222,33 +226,41 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             pGeom=pGeom->next;
         }  
     }
+    printf("nodeAmount:%d,wayAmount:%d,geomAmount:%d,linkAmount:%d\n",nodeAmount,wayAmount,geomAmount,linkAmount);
     fclose(fp);
     return 0;
 }
 
    //test for go through all the <node>
     void showNode(NodeList* nodeHead){
-
+        long amount=0;
         nodeHead=nodeHead->next;
         while(nodeHead!=NULL){ 
+            amount++;
             printf("<node> id:%d,lon:%lf,lat:%lf\n",nodeHead->spot.id,nodeHead->spot.lon,nodeHead->spot.lat);
             nodeHead=nodeHead->next;
         }
+        printf("the amount of the nodes is %d",amount);
     }
 
     //test for go through all the <link>
     void showLink(LinkList* linkHead){
+        long amount=0;
         linkHead=linkHead->next;
         while(linkHead!=NULL){ 
+            amount++;
             printf("<link> id:%d,nodex:%d,nodey:%d,way:%d,length:%lf,veg:%lf,arch:%lf\n",linkHead->currentLink.id,linkHead->currentLink.nodex,linkHead->currentLink.nodey,linkHead->currentLink.way,linkHead->currentLink.length,linkHead->currentLink.veg,linkHead->currentLink.arch);
             linkHead=linkHead->next;
         }
+        printf("the amount of the links is %d",amount);
     }
 
     // test for go through all the <way>
     void showWay(WayList* wayHead){
+        long amount=0;
         wayHead=wayHead->next;
         while(wayHead!=NULL){ 
+            amount++;
             printf("<wayID> :%d\n",wayHead->currentWay.id);
             wayHead->currentWay.head=wayHead->currentWay.head->next;
             while(wayHead->currentWay.head!=NULL){
@@ -258,22 +270,24 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             printf("\n");
             wayHead=wayHead->next;
         }
+        printf("the amount of the ways is %d",amount);
     }
     
   // test for go through all the <geom>
     void showGeom(GeomList* geomHead){
+        long amount=0;
         geomHead=geomHead->next;
         while(geomHead!=NULL){ 
-            printf("<geomHead> :%d\n",geomHead->currentGeom.id);
-            printf("<innerbegin>\n"); 
+            amount++;
+            printf("<geomID> :%d\n",geomHead->currentGeom.id);
             geomHead->currentGeom.head=geomHead->currentGeom.head->next;
             while(geomHead->currentGeom.head!=NULL){
-                printf("<geom> :%d\n",geomHead->currentGeom.head->spot.id);
+                printf("<node> :%d\n",geomHead->currentGeom.head->spot.id);
                 geomHead->currentGeom.head=geomHead->currentGeom.head->next;
             }
-            printf("<innerend>\n");
             geomHead=geomHead->next;
         }
+        printf("the amount of the geoms is %d",amount);
     }
 
 
@@ -285,7 +299,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             printf("<pAdjacent id> :%d\n",pAdjacent->spot.id);
             pAdjacent->head=pAdjacent->head->next;
             while(pAdjacent->head!=NULL){
-                printf("%d ",pAdjacent->head->spot.id);
+                printf("%d lat:%lf,lon:%lf dis:%lf\n",pAdjacent->head->spot.id,pAdjacent->head->spot.lat,pAdjacent->head->spot.lon,pAdjacent->head->spot.dis);
                 pAdjacent->head=pAdjacent->head->next;
             }
             printf("\n");
@@ -304,10 +318,14 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         }
     }
 
+double computeDis(Node x, Node y){
+    return sqrt(pow(x.lat-y.lat,2)+pow(x.lon-y.lon,2));
+}
 
 void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
 
     AdjacencyList* pAdjacent=adjacentHead;
+    NodeList* nodeHead = pNode;
 
      pNode=pNode->next;
         while(pNode!=NULL){
@@ -328,10 +346,8 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
 
             LinkList* pLink=linkHead;
             pLink=pLink->next;
-            // printf("%d:",id);
             while(pLink!=NULL){ 
                 if(pLink->currentLink.nodex==id){
-                    // printf("%d ",pLink->currentLink.nodey);
 
                     NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
                     temp->next=NULL;
@@ -339,6 +355,10 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
                     Node tempNode;
 
                     tempNode.id=pLink->currentLink.nodey;
+                    Node gotNode = getNode(tempNode.id,nodeHead);
+                    tempNode.lat=gotNode.lat;
+                    tempNode.lon=gotNode.lon;
+                    tempNode.dis=computeDis(gotNode,getNode(id,nodeHead));
 
                     temp->spot=tempNode;
                     pointer->next=temp; 
@@ -347,7 +367,6 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
                 }
                     
                 else if(pLink->currentLink.nodey==id){
-                    // printf("%d ",pLink->currentLink.nodex);
 
                     NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
                     temp->next=NULL;
@@ -355,6 +374,10 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
                     Node tempNode;
 
                     tempNode.id=pLink->currentLink.nodex;
+                    Node gotNode = getNode(tempNode.id,nodeHead);
+                    tempNode.lat=gotNode.lat;
+                    tempNode.lon=gotNode.lon;
+                    tempNode.dis=computeDis(gotNode,getNode(id,nodeHead));
 
                     temp->spot=tempNode;
                     pointer->next=temp; 
@@ -363,7 +386,6 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
                 
                 pLink=pLink->next;
             }
-            //  printf("\n");
 
             TempAdjacent->head=adjacentNodeList;
             pAdjacent->next=TempAdjacent; 
@@ -371,9 +393,8 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
 
             pNode=pNode->next;
         }
+        
 }
-
-
 
     
     

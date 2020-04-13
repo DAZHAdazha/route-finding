@@ -2,7 +2,7 @@
 #define mark 1
 typedef struct node{
     long id;
-    double lat,lon;
+    double lat,lon,dis;
 }Node;
 
 typedef struct nodelist{
@@ -46,5 +46,9 @@ typedef struct adjacencyList{
     NodeList* head;
     struct adjacencyList* next;
 }AdjacencyList;
+
+typedef struct marked{
+    int id,val;
+}Marked;
 
 #endif

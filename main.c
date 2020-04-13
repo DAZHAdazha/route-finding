@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include"input.c"
 #include"visulization.c"
+#include"algorithm.c"
 int main(void){
 
     //handling the input data
@@ -34,6 +35,7 @@ int main(void){
     // initialize and storing the input from the file
     input(pNode,pWay,pLink,pGeom);
     
+    // generate adjacent list
     adjacent(pNode,pLink,pAdjacent);
 
     // show the original map with given data
@@ -44,6 +46,22 @@ int main(void){
     // showLink(pLink);
     // showGeom(pGeom);
     // showAdjacentList(pAdjacent);
+
+    Marked marks[3941]={0,0};
+
+    // fill up the id for the structure marks 
+    pNode = nodeHead;
+    int num=0;
+        pNode=pNode->next;
+        while(pNode!=NULL){ 
+            marks[num].id=pNode->spot.id;
+            pNode=pNode->next;
+            num++;
+        }
+
+    // printf("%d\n",getIndex(-1867901273,marks));
+
+    dfs(-8847,marks,pAdjacent);
 
     return 0;
 }
