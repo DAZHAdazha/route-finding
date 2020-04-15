@@ -47,7 +47,11 @@ int main(void){
     // showGeom(pGeom);
     // showAdjacentList(pAdjacent);
 
-    Marked marks[3941]={0,0};
+    Marked marks[3941]={0,-1};
+    for(int i=0;i<3941;i++){
+       marks[i].val=-1;
+    }
+    int edgeTo[3941];
 
     // fill up the id for the structure marks 
     pNode = nodeHead;
@@ -59,9 +63,8 @@ int main(void){
             num++;
         }
 
-    // printf("%d\n",getIndex(-1867901273,marks));
 
-    dfs(-8847,marks,pAdjacent);
-
+    dfs(-8847,marks,pAdjacent,edgeTo);
+    pathTo(983404907,marks,-8847,edgeTo);
     return 0;
 }

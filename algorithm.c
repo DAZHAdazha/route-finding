@@ -8,11 +8,12 @@ int getIndex(long id,Marked marks[]){
         }
     }
 
-// int hasPathTO(Node v){
+int hasPathTo(long id,Marked marked[]){
+    int w=getIndex(id,marked);
+    return marked[w].val;
+}
 
-// }
-
-void dfs(long id,Marked marked[],AdjacencyList* pAdjacent){
+void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
     AdjacencyList* adjacentHead=pAdjacent;
     int v=getIndex(id,marked);
     marked[v].val=1;
@@ -23,11 +24,12 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent){
         if(adjacentHead->spot.id==id){
             adjacentHead->head=adjacentHead->head->next;   
             while(adjacentHead->head!=NULL){
-                printf("%d lat:%lf,lon:%lf dis:%lf\n",adjacentHead->head->spot.id,adjacentHead->head->spot.lat,adjacentHead->head->spot.lon,adjacentHead->head->spot.dis);
+                // printf("%d lat:%lf,lon:%lf dis:%lf\n",adjacentHead->head->spot.id,adjacentHead->head->spot.lat,adjacentHead->head->spot.lon,adjacentHead->head->spot.dis);
                 int w=getIndex(adjacentHead->head->spot.id,marked);
-                if(!marked[w].val){
+                if(marked[w].val==-1){
                     // code here to add edgeTo[w]=v;
-                    dfs(adjacentHead->head->spot.id,marked,pAdjacent);
+                    edgeTo[w]=v;
+                    dfs(adjacentHead->head->spot.id,marked,pAdjacent,edgeTo);
                 }
                 adjacentHead->head=adjacentHead->head->next;
             }
@@ -37,7 +39,14 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent){
     }
 }
 
-// NodeList pathTo(){
-    
-// }
+ void pathTo(long id,Marked marked[],long start,int edgeTo[]){
+    if(hasPathTo(id,marked)==-1){
+        printf("no path to this node");
+         return;
+    }
+    for(int i=getIndex(id,marked);i!=getIndex(start,marked);i=edgeTo[i])
+        printf("%d ",marked[i].id);
+    printf("%d",start);
+    return;
+ }
 
