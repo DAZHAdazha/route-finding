@@ -39,7 +39,7 @@ int main(void){
     adjacent(pNode,pLink,pAdjacent);
 
     // show the original map with given data
-    //showOriginalMap(pNode,pLink);
+    // showOriginalMap(pNode,pLink);
     
     // showNode(pNode);
     // showWay(pWay);
@@ -47,24 +47,15 @@ int main(void){
     // showGeom(pGeom);
     // showAdjacentList(pAdjacent);
 
+    //initialize the marks
     Marked marks[3941]={0,-1};
-    for(int i=0;i<3941;i++){
-       marks[i].val=-1;
-    }
     int edgeTo[3941];
+    initializeMark(marks,pNode);
 
-    // fill up the id for the structure marks 
-    pNode = nodeHead;
-    int num=0;
-        pNode=pNode->next;
-        while(pNode!=NULL){ 
-            marks[num].id=pNode->spot.id;
-            pNode=pNode->next;
-            num++;
-        }
-
-
-    dfs(-8847,marks,pAdjacent,edgeTo);
-    pathTo(983404907,marks,-8847,edgeTo);
+    // mark sure thr first argument in dfs() is the same as the third argument in pathTo()
+    dfs(-1887884675,marks,pAdjacent,edgeTo);
+    NodeList* pPath=pathTo(-1887884839,marks,-1887884675,edgeTo,pNode);
+    // showNode(pPath);
+    showPath(pPath);
     return 0;
 }

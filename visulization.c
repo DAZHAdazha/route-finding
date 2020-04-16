@@ -23,6 +23,8 @@ void showOriginalMap(NodeList* nodeHead,LinkList* nodeLink){
     xdif=xmax-xmin;
     ydif=ymax-ymin;
 
+    printf("xdif:%lf,ydif:%lf,xmax:%lf,xmin:%lf,ymax:%lf,ymin:%lf\n",xdif,ydif,xmax,xmin,ymax,ymin);
+
     FILE *fp = NULL;
     fp = fopen("./originalMap.txt", "w+");
     pLink=pLink->next;
@@ -53,5 +55,21 @@ void showOriginalMap(NodeList* nodeHead,LinkList* nodeLink){
         }
         pLink=pLink->next;
     }
+    fclose(fp);
+}
+
+void showPath(NodeList* nodeHead){
+    FILE *fp = NULL;
+    fp = fopen("./path.txt", "w+");
+    NodeList* pNode=nodeHead;
+
+    pNode=pNode->next;
+
+    double xdif=0.02399,ydif=0.010314,xmax=-1.540754,xmin=-1.564744,ymax=53.811158,ymin=53.800844;
+    while(pNode!=NULL){ 
+        fprintf(fp,"%lf %lf\n",(pNode->spot.lon-xmin)/xdif*1000,(pNode->spot.lat-ymin)/ydif*1000);
+        pNode=pNode->next;
+    }
+
     fclose(fp);
 }
