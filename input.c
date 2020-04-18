@@ -307,6 +307,18 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         }
     }
 
+//  test for go through all the edgelist
+    void showEdgeList(EdgeList* edgeHead){
+        long amount=0;
+        edgeHead=edgeHead->next;
+        while(edgeHead!=NULL){ 
+            amount++;
+            printf("<edge> x:%d,y:%d,dis:%lf\n",edgeHead->e.x,edgeHead->e.y,edgeHead->e.dis);
+            edgeHead=edgeHead->next;
+        }
+        printf("the amount of the edges is %d\n",amount);
+    }
+
 
     Node getNode(long id,NodeList* nodeHead){
         nodeHead=nodeHead->next;

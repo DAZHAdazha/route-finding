@@ -5,9 +5,9 @@ typedef struct node{
     double lat,lon,dis;
 }Node;
 
-typedef struct nodelist{
+typedef struct nodeList{
     Node spot;
-    struct nodelist* next;
+    struct nodeList* next;
 }NodeList;
 
 typedef struct link{
@@ -50,5 +50,21 @@ typedef struct adjacencyList{
 typedef struct marked{
     int id,val;
 }Marked;
+
+typedef struct queue{
+    NodeList* first;
+    NodeList* last;
+    int n;
+}Queue;
+
+typedef struct edge{
+    long x,y;
+    double dis;
+}Edge;
+
+typedef struct edgeList{
+    Edge e;
+    struct edgeList* next;
+}EdgeList;
 
 #endif

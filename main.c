@@ -53,9 +53,25 @@ int main(void){
     initializeMark(marks,pNode);
 
     // mark sure thr first argument in dfs() is the same as the third argument in pathTo()
-    dfs(-1887884675,marks,pAdjacent,edgeTo);
-    NodeList* pPath=pathTo(-1887884839,marks,-1887884675,edgeTo,pNode);
+    // dfs(-1887884675,marks,pAdjacent,edgeTo);
+    // NodeList* pPath=pathTo(-1887884839,marks,-1887884675,edgeTo,pNode);
+
     // showNode(pPath);
-    showPath(pPath);
+    // showPath(pPath);
+
+
+    Queue* mst=(Queue*)malloc(sizeof(Queue));
+    mst->n=0;
+    mst->first=NULL;
+    mst->last=NULL;
+
+    EdgeList* pq=(EdgeList*)malloc(sizeof(EdgeList));
+    pq->next=NULL;
+
+    visit(marks,247293203,pAdjacent,pq);
+    showEdgeList(pq);
+    Edge min=delMin(pq);
+    printf("x=%d,y=%d,dis=%lf\n",min.x,min.y,min.dis);
+    showEdgeList(pq);
     return 0;
 }

@@ -39,12 +39,14 @@ int hasPathTo(long id,Marked marked[]){
 void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
     AdjacencyList* adjacentHead=pAdjacent;
     int v=getIndex(id,marked);
-    if(v==-1)
+    if(v==-1){
         printf("There is no such node\n");
+        return;
+    }
+        
     marked[v].val=1;
     // go through the adjacent list for the node v
     adjacentHead=adjacentHead->next;
-
     while(adjacentHead!=NULL){
         if(adjacentHead->spot.id==id){
             adjacentHead->head=adjacentHead->head->next;   
@@ -122,4 +124,105 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
     pPath=pPath->next;
     return pathHead;
  }
+
+void enqueue(Queue* qHead, Node item){
+    NodeList* old=qHead->last;
+    qHead->last=(NodeList*)malloc(sizeof(NodeList));
+    qHead->last->next=NULL;
+    qHead->last->spot=item;
+    if(qHead->n==0)
+        qHead->first=qHead->last;
+    else
+        old->next=qHead->last;
+    qHead->n++;
+}
+
+Node dequeue(Queue* qHead){
+    NodeList* temp=qHead->first;
+    qHead->first=qHead->first->next;
+    if(qHead->n==0)
+        qHead->last=NULL;
+    qHead->n--;
+    return temp->spot;
+}
+
+void visit(Marked marked[], long id, AdjacencyList* pAdjacent, EdgeList* pq){
+    int v=getIndex(id,marked);
+    if(v==-1){
+        printf("There is no such node\n");
+        return;
+    }
+        
+    marked[v].val=1;
+    EdgeList* pqHead=pq;
+    AdjacencyList* adjacentHead=pAdjacent;
+
+    adjacentHead=adjacentHead->next;
+    while(adjacentHead!=NULL){
+        if(adjacentHead->spot.id==id){
+            printf("id=%d\n",id);
+            adjacentHead->head=adjacentHead->head->next;   
+            while(adjacentHead->head!=NULL){
+                printf("%d lat:%lf,lon:%lf dis:%lf\n",adjacentHead->head->spot.id,adjacentHead->head->spot.lat,adjacentHead->head->spot.lon,adjacentHead->head->spot.dis);
+                int w=getIndex(adjacentHead->head->spot.id,marked);
+                if(marked[w].val==-1){
+
+                    EdgeList* tempEdge=(EdgeList*)malloc(sizeof(EdgeList));
+                    tempEdge->next=NULL;
+
+                    Edge temp;
+                    temp.x=id;
+                    temp.y=adjacentHead->head->spot.id;
+                    temp.dis=adjacentHead->head->spot.dis;
+                    tempEdge->e=temp;
+                    pqHead->next=tempEdge;
+                    pqHead=pqHead->next;
+
+                }
+
+
+                adjacentHead->head=adjacentHead->head->next;
+            }
+            break;
+        }
+        adjacentHead=adjacentHead->next;
+    }
+
+}
+
+// pop out the minist edge
+Edge delMin(EdgeList* pq){
+    double min=1000;
+    Edge temp;
+    EdgeList* edgeHead=pq;
+    edgeHead=edgeHead->next;
+        while(edgeHead!=NULL){ 
+            if(edgeHead->e.dis<min){
+                min=edgeHead->e.dis;
+                temp.dis=edgeHead->e.dis;
+                temp.x=edgeHead->e.x;
+                temp.y=edgeHead->e.y;
+            }
+            edgeHead=edgeHead->next;
+        }
+
+    edgeHead=pq;
+    if(edgeHead->next->e.dis==min){
+        edgeHead->next=edgeHead->next->next;
+        return temp;
+    }
+    edgeHead=edgeHead->next;
+        while(edgeHead!=NULL){ 
+            if(edgeHead->next->e.dis==min){
+                edgeHead->next=edgeHead->next->next;
+                return temp;
+            }
+            edgeHead=edgeHead->next;
+        }
+
+
+        return temp;
+}
+
+
 
