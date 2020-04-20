@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<math.h>
 #include"datastructure.h"
 
 int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
@@ -330,9 +329,6 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         }
     }
 
-double computeDis(Node x, Node y){
-    return sqrt(pow(x.lat-y.lat,2)+pow(x.lon-y.lon,2));
-}
 
 void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
 
@@ -370,7 +366,7 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
                     Node gotNode = getNode(tempNode.id,nodeHead);
                     tempNode.lat=gotNode.lat;
                     tempNode.lon=gotNode.lon;
-                    tempNode.dis=computeDis(gotNode,getNode(id,nodeHead));
+                    tempNode.dis=pLink->currentLink.length;
 
                     temp->spot=tempNode;
                     pointer->next=temp; 
@@ -389,7 +385,7 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
                     Node gotNode = getNode(tempNode.id,nodeHead);
                     tempNode.lat=gotNode.lat;
                     tempNode.lon=gotNode.lon;
-                    tempNode.dis=computeDis(gotNode,getNode(id,nodeHead));
+                    tempNode.dis=pLink->currentLink.length;
 
                     temp->spot=tempNode;
                     pointer->next=temp; 
@@ -407,6 +403,8 @@ void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
         }
         
 }
+
+
 
     
     
