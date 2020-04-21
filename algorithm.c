@@ -130,19 +130,20 @@ void enqueue(Queue* qHead, Node item){
     qHead->last=(NodeList*)malloc(sizeof(NodeList));
     qHead->last->next=NULL;
     qHead->last->spot=item;
-    if(qHead->n==0)
+    if(qHead->first==NULL)
         qHead->first=qHead->last;
     else
         old->next=qHead->last;
-    qHead->n++;
+
+    return;
 }
 
 Node dequeue(Queue* qHead){
     NodeList* temp=qHead->first;
     qHead->first=qHead->first->next;
-    if(qHead->n==0)
+    if(qHead->first==NULL)
         qHead->last=NULL;
-    qHead->n--;
+
     return temp->spot;
 }
 
@@ -191,11 +192,10 @@ void visit(Marked marked[], long id, AdjacencyList* pAdjacent, EdgeList* pq){
 }
 
 // pop out the minist node
-Node delMin(NodeList* pq){
+Node delMin(Queue* pq){
     double min=1000;
     Node temp;
-    NodeList* nodeHead=pq;
-    nodeHead=nodeHead->next;
+    NodeList* nodeHead=pq->first;
         while(nodeHead!=NULL){ 
             if(nodeHead->spot.dis<min){
                 min=nodeHead->spot.dis;
@@ -205,20 +205,19 @@ Node delMin(NodeList* pq){
             nodeHead=nodeHead->next;
         }
 
-    nodeHead=pq;
-    if(nodeHead->next->spot.dis==min){
-        nodeHead->next=nodeHead->next->next;
+    nodeHead=pq->first;
+    if(nodeHead->spot.dis==min){
+        pq->first=nodeHead->next;
         return temp;
     }
-    nodeHead=nodeHead->next;
-        while(nodeHead!=NULL){ 
-            if(nodeHead->next->spot.dis==min){
-                nodeHead->next=nodeHead->next->next;
-                return temp;
-            }
-            nodeHead=nodeHead->next;
+    while(nodeHead!=NULL){ 
+        if(nodeHead->next->spot.dis==min){
+            nodeHead->next=nodeHead->next->next;
+            return temp;
         }
-        return temp;
+        nodeHead=nodeHead->next;
+    }
+    return temp;
 }
 
 
@@ -249,35 +248,36 @@ void initializePq(LinkList* linkHead, EdgeList* edgeTo){
 }
 
 
-int contain(NodeList* pq,long id){
-    NodeList* nodeHead=pq;
-    nodeHead=nodeHead->next;
-    while(nodeHead!=NULL){ 
-            if(id==nodeHead->spot.id)
-                return 1;
-            nodeHead=nodeHead->next;
-        }
-        return 0;
+int contain(Queue* pq,long id){
+
+    NodeList* pHead=pq->first;
+
+    while(pHead!=NULL){
+        if(id==pHead->spot.id)
+            return 1;
+        pHead=pHead->next;
+    }    
+    return 0;
 }
 
-void change(NodeList* pq,long id,long dis){
-    NodeList* nodeHead=pq;
-    nodeHead=nodeHead->next;
-    while(nodeHead!=NULL){ 
-            if(id==nodeHead->spot.id){
-                nodeHead->spot.dis=dis;
-                return;
-            }
-            nodeHead=nodeHead->next;
+void change(Queue* pq,long id,long dis){
+
+    NodeList* pHead=pq->first;
+    while(pHead!=NULL){
+        if(id==pHead->spot.id){
+            pHead->spot.dis=dis;
+            return;
         }
-        return;
+        pHead=pHead->next;
+    }   
+    return;
 }
 
 
 
-void relax(long id, AdjacencyList* pAdjacent,double disTo[],Marked marked[],Edge edgeTo[],NodeList* pq){ 
+void relax(long id, AdjacencyList* pAdjacent,double disTo[],Marked marked[],Edge edgeTo[],Queue* pq){ 
 
-    NodeList* pHead=pq;
+    NodeList* pHead=pq->first;
 
     long v=getIndex(id,marked);
 
@@ -299,24 +299,18 @@ void relax(long id, AdjacencyList* pAdjacent,double disTo[],Marked marked[],Edge
                     temp.x=id;
                     temp.y=adjacentHead->head->spot.id;
                     temp.dis=adjacentHead->head->spot.dis;
-
                     edgeTo[w]=temp;
-
-                    if(contain(pq,adjacentHead->head->spot.id)==1)
+                    if(contain(pq,adjacentHead->head->spot.id)==1){
                         change(pq,adjacentHead->head->spot.id,disTo[w]);
+                        
+                    }
                     else{
-
                         Node tempNode;
                         tempNode.id=adjacentHead->head->spot.id;
                         tempNode.dis=disTo[w];
-
-                        NodeList* TempNode=(NodeList*)malloc(sizeof(NodeList));
-                        TempNode->next=NULL;
-
-                        TempNode->spot=tempNode;
-                        pHead->next=TempNode;
-                        pHead=pHead->next;
-                    }
+                        enqueue(pq,tempNode);
+                        
+                     }
 
                 }
 
@@ -330,7 +324,7 @@ void relax(long id, AdjacencyList* pAdjacent,double disTo[],Marked marked[],Edge
 }
 
 
-void dijkstra(NodeList* pq, double disTo[], long start, Marked marked[],AdjacencyList* pAdjacent,Edge edgeTo[]){
+void dijkstra(Queue* pq, double disTo[], long start, Marked marked[],AdjacencyList* pAdjacent,Edge edgeTo[]){
     int s=getIndex(start,marked);
     if(s==-1){
         printf("there is no such node\n");
@@ -339,43 +333,28 @@ void dijkstra(NodeList* pq, double disTo[], long start, Marked marked[],Adjacenc
     else{
         disTo[s]=0;
 
-        NodeList* pHead=pq;
-
         Node tempNode;
         tempNode.id=start;
         tempNode.dis=0;
 
-        NodeList* TempNode=(NodeList*)malloc(sizeof(NodeList));
-        TempNode->next=NULL;
+        enqueue(pq,tempNode);
 
-        TempNode->spot=tempNode;
-        pHead->next=TempNode;
-        pHead=pHead->next;
+        while(pq->first!=NULL){ // 有问题 用链表不对 应该用栈实现
 
+            long id=delMin(pq).id;
+            relax(id,pAdjacent,disTo,marked,edgeTo,pq);
 
-        pHead=pq;
-        pHead=pHead->next;
-        while(pHead!=NULL){         
-            relax(delMin(pq).id,pAdjacent,disTo,marked,edgeTo,pq);
-            pHead=pHead->next;
         }
-
-
     }
 }
 
 // NodeList* pathToDijkstra(long id,double disTo[], Marked marked[],Edge edgeTo[]){
 void pathToDijkstra(long id,double disTo[], Marked marked[],Edge edgeTo[]){
     int v=getIndex(id,marked);
-    printf("thee\n");
     if(disTo[v]<10000){
-        printf("v=%d\n",v);
         NodeList* pathHead=(NodeList*)malloc(sizeof(NodeList));
         pathHead->next=NULL;
         NodeList* pPath=pathHead;
-        
-        printf("!!!%d\n",edgeTo[832].y);
-
         for(Edge e=edgeTo[v];e.dis!=-1;e=edgeTo[getIndex(e.x,marked)]){
             printf("index=%d,x=%d,y=%d,dis=%lf\n",getIndex(e.y,marked),e.x,e.y,e.dis);
         }

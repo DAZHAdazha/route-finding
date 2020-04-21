@@ -239,7 +239,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             printf("<node> id:%d,lon:%lf,lat:%lf\n",nodeHead->spot.id,nodeHead->spot.lon,nodeHead->spot.lat);
             nodeHead=nodeHead->next;
         }
-        printf("the amount of the nodes is %d",amount);
+        printf("the amount of the nodes is %d\n",amount);
     }
 
     //test for go through all the <link>
@@ -251,7 +251,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             printf("<link> id:%d,nodex:%d,nodey:%d,way:%d,length:%lf,veg:%lf,arch:%lf\n",linkHead->currentLink.id,linkHead->currentLink.nodex,linkHead->currentLink.nodey,linkHead->currentLink.way,linkHead->currentLink.length,linkHead->currentLink.veg,linkHead->currentLink.arch);
             linkHead=linkHead->next;
         }
-        printf("the amount of the links is %d",amount);
+        printf("the amount of the links is %d\n",amount);
     }
 
     // test for go through all the <way>
@@ -269,7 +269,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             printf("\n");
             wayHead=wayHead->next;
         }
-        printf("the amount of the ways is %d",amount);
+        printf("the amount of the ways is %d\n",amount);
     }
     
   // test for go through all the <geom>
@@ -286,7 +286,7 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             }
             geomHead=geomHead->next;
         }
-        printf("the amount of the geoms is %d",amount);
+        printf("the amount of the geoms is %d\n",amount);
     }
 
 
@@ -317,6 +317,15 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
         }
         printf("the amount of the edges is %d\n",amount);
     }
+
+    showQueue(Queue* pq){
+        NodeList* pHead=pq->first;
+        while(pHead!=NULL){
+            printf("id=%d,dis=%lf\n",pHead->spot.id,pHead->spot.dis);
+            pHead=pHead->next;
+        }   
+    }
+
 
 
     Node getNode(long id,NodeList* nodeHead){

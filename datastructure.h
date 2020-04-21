@@ -54,7 +54,6 @@ typedef struct marked{
 typedef struct queue{
     NodeList* first;
     NodeList* last;
-    int n;
 }Queue;
 
 typedef struct edge{

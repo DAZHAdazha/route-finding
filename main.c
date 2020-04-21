@@ -60,13 +60,6 @@ int main(void){
     // showPath(pPath);
 
 
-    Queue* mst=(Queue*)malloc(sizeof(Queue));
-    mst->n=0;
-    mst->first=NULL;
-    mst->last=NULL;
-
-    NodeList* pq=(NodeList*)malloc(sizeof(NodeList));
-    pq->next=NULL;
 
     Edge edgeToDijkstra[3941];
     for(int i=0;i<3941;i++){
@@ -90,23 +83,31 @@ int main(void){
     }
 
 
+    Queue* pq=(Queue*)malloc(sizeof(Queue));
+    pq->first=NULL;
+    pq->last=NULL;
+
+
+
     // initializePq(pLink,pq);
     // showEdgeList(pq);
-
+printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 // 注意双向
-    dijkstra(pq,disTo,247353859,marks,pAdjacent,edgeToDijkstra);
+    dijkstra(pq,disTo,250221603,marks,pAdjacent,edgeToDijkstra);
 
     // relax(-8847,pAdjacent,disTo,marks,edgeToDijkstra,pq);
 
-    for(int i=0;i<3941;i++){
-        printf("i=%d,x=%d,y=%d,dis=%lf\n",i,edgeToDijkstra[i].x,edgeToDijkstra[i].y,edgeToDijkstra[i].dis);
-    }
+    // for(int i=0;i<3941;i++){
+    //     printf("i=%d,x=%d,y=%d,dis=%lf\n",i,edgeToDijkstra[i].x,edgeToDijkstra[i].y,edgeToDijkstra[i].dis);
+    // }
 
     // for(int i=0;i<3941;i++){
     //     printf("i:%d dis=%lf\n",i,disTo[i]);
     // }
 
-    pathToDijkstra(247353859,disTo,marks,edgeToDijkstra);
+    printf("path\n");
+    pathToDijkstra(250221629,disTo,marks,edgeToDijkstra);
+
 
     printf("here");
     return 0;
