@@ -70,6 +70,5 @@ void showPath(NodeList* nodeHead){
         fprintf(fp,"%lf %lf\n",(pNode->spot.lon-xmin)/xdif*1000,(pNode->spot.lat-ymin)/ydif*1000);
         pNode=pNode->next;
     }
-
     fclose(fp);
 }

@@ -13,7 +13,6 @@ typedef struct nodeList{
 typedef struct link{
     long id,nodex,nodey,way;
     double length,veg,arch,land;
-    //POI
 }Link;
 
 typedef struct way{
@@ -51,10 +50,21 @@ typedef struct marked{
     int id,val;
 }Marked;
 
+// typedef struct queue{
+//     NodeList* first;
+//     NodeList* last;
+//     int n;
+// }Queue;
+
+
 typedef struct queue{
-    NodeList* first;
-    NodeList* last;
+    NodeList* head;
+    int n;
 }Queue;
+
+
+
+
 
 typedef struct edge{
     long x,y;
