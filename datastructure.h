@@ -1,5 +1,6 @@
 #ifndef mark	// use macro to avoid repeating declaration
 #define mark 1
+
 typedef struct node{
     long id;
     double lat,lon,dis;
@@ -50,21 +51,10 @@ typedef struct marked{
     int id,val;
 }Marked;
 
-// typedef struct queue{
-//     NodeList* first;
-//     NodeList* last;
-//     int n;
-// }Queue;
-
-
 typedef struct queue{
     NodeList* head;
     int n;
 }Queue;
-
-
-
-
 
 typedef struct edge{
     long x,y;
@@ -75,6 +65,5 @@ typedef struct edgeList{
     Edge e;
     struct edgeList* next;
 }EdgeList;
-
 
 #endif

@@ -1,32 +1,6 @@
 #include<stdio.h>
 #include"datastructure.h"
 
-// initialize the marks
-void initializeMark(Marked marks[],NodeList* nodeHead){
-    for(int i=0;i<3941;i++){
-       marks[i].val=-1;
-    }
-
-    // fill up the id for the structure marks 
-    NodeList* pNode = nodeHead;
-    int num=0;
-        pNode=pNode->next;
-        while(pNode!=NULL){ 
-            marks[num].id=pNode->spot.id;
-            pNode=pNode->next;
-            num++;
-        }
-}
-
-// for a given node id, output the index in marks
-int getIndex(long id,Marked marks[]){
-        for(int i=0;i<3941;i++){
-            if(marks[i].id==id)
-                return i;
-        }
-        return -1;
-    }
-
 // for a given node id, output whether it has path to the start
 int hasPathTo(long id,Marked marked[]){
     int w=getIndex(id,marked);
@@ -42,8 +16,7 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
     if(v==-1){
         printf("There is no such node\n");
         return;
-    }
-        
+    }  
     marked[v].val=1;
     // go through the adjacent list for the node v
     adjacentHead=adjacentHead->next;
@@ -51,10 +24,8 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
         if(adjacentHead->spot.id==id){
             adjacentHead->head=adjacentHead->head->next;   
             while(adjacentHead->head!=NULL){
-                // printf("%d lat:%lf,lon:%lf dis:%lf\n",adjacentHead->head->spot.id,adjacentHead->head->spot.lat,adjacentHead->head->spot.lon,adjacentHead->head->spot.dis);
                 int w=getIndex(adjacentHead->head->spot.id,marked);
                 if(marked[w].val==-1){
-                    // code here to add edgeTo[w]=v;
                     edgeTo[w]=v;
                     dfs(adjacentHead->head->spot.id,marked,pAdjacent,edgeTo);
                 }
@@ -67,12 +38,11 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
 }
 
 // for a given terminal point, output the path to the start if it exists in algorithm dfs
- NodeList* pathTo(long id,Marked marked[],long start,int edgeTo[],NodeList* nodeHead){
+void pathTo(long id,Marked marked[],long start,int edgeTo[],NodeList* nodeHead){
     if(hasPathTo(id,marked)==-1){
         printf("no path to this node");
-         return NULL;
+         return;
     }
-
     NodeList* pathHead=(NodeList*)malloc(sizeof(NodeList));
     pathHead->next=NULL;
 	NodeList* pPath=pathHead;
@@ -94,7 +64,6 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
             }
             pNode=pNode->next;
         }
-
         temp->spot=tempNode;
         pPath->next=temp; 
         pPath=pPath->next;
@@ -116,14 +85,16 @@ void dfs(long id,Marked marked[],AdjacencyList* pAdjacent,int edgeTo[]){
         }
         pNode=pNode->next;
     }
-
     temp->spot=tempNode;
     pPath->next=temp; 
     pPath=pPath->next;
-    return pathHead;
+    showNode(pathHead);
+    showPath(pathHead);
+    printf("The output file 'path.txt' is generated.\n");
+    return;
  }
 
-
+// push a item into queue
 void enqueue(Queue* qHead, Node item){
     NodeList* TempNode=(NodeList*)malloc(sizeof(NodeList));
     TempNode->next=NULL;
@@ -131,17 +102,16 @@ void enqueue(Queue* qHead, Node item){
     
     NodeList* nodeHead=qHead->head;
 
-
     while(nodeHead->next!=NULL){ 
         nodeHead=nodeHead->next;
     }
-    
     nodeHead->next=TempNode;
     qHead->n++;
     
     return;
 }
 
+// pop out the minist item in the queue
 Node delMin(Queue* pq){
 	double min=99999;
     NodeList* nodeHead=pq->head;
@@ -152,7 +122,6 @@ Node delMin(Queue* pq){
 		}
         nodeHead=nodeHead->next;
     }
-    
     nodeHead=pq->head;
     while(nodeHead!=NULL){
     	if(nodeHead->next->spot.dis==min){
@@ -167,8 +136,8 @@ Node delMin(Queue* pq){
 	}
 }
 
+// return the boolean value of whether the queue contain the item
 int contain(Queue* pq,long id){
-	
 	NodeList* nodeHead=pq->head;
     nodeHead=nodeHead->next;
     while(nodeHead!=NULL){ 
@@ -179,6 +148,7 @@ int contain(Queue* pq,long id){
 	return 0;
 }
 
+// change value of the item in the queue if exists 
 void change(Queue* pq,long id,long dis){
     NodeList* nodeHead=pq->head;
     nodeHead=nodeHead->next;
@@ -192,8 +162,8 @@ void change(Queue* pq,long id,long dis){
 	return;
 }
 
+// importent step in algorithm Dijkstra, to find current shortest path for given start point
 void relax(long id, AdjacencyList* pAdjacent,double disTo[],Marked marked[],Edge edgeTo[],Queue* pq){ 
-
     long v=getIndex(id,marked);
 
     AdjacencyList* adjacentHead=pAdjacent;
@@ -215,12 +185,10 @@ void relax(long id, AdjacencyList* pAdjacent,double disTo[],Marked marked[],Edge
                         change(pq,adjacentHead->head->spot.id,disTo[w]); 
                     }
                     else{
-
                         Node tempNode;
                         tempNode.id=adjacentHead->head->spot.id;
                         tempNode.dis=disTo[w];
                         enqueue(pq,tempNode);
-
                      }
                 }
                 adjacentHead->head=adjacentHead->head->next;
@@ -231,6 +199,7 @@ void relax(long id, AdjacencyList* pAdjacent,double disTo[],Marked marked[],Edge
     }
 }
 
+// to find the shortest path to all other nodes with the given start node
 void dijkstra(Queue* pq, double disTo[], long start, Marked marked[],AdjacencyList* pAdjacent,Edge edgeTo[]){
     int s=getIndex(start,marked);
     if(s==-1){
@@ -253,6 +222,7 @@ void dijkstra(Queue* pq, double disTo[], long start, Marked marked[],AdjacencyLi
     }
 }
 
+// return the boolean value of whether has path in Dijkstra algorithm
 int hasPathToDijkstra(long id,Marked marked[],double disTo[]){
     if(disTo[getIndex(id,marked)]<100000)
         return 1;
@@ -260,14 +230,10 @@ int hasPathToDijkstra(long id,Marked marked[],double disTo[]){
         return 0;
 }
 
-
 // NodeList* pathToDijkstra(long id,double disTo[], Marked marked[],Edge edgeTo[]){
 void pathToDijkstra(long id,double disTo[], Marked marked[],Edge edgeTo[],NodeList* nodeHead){
     if(hasPathToDijkstra(id,marked,disTo)){
         int v=getIndex(id,marked);
-        // NodeList* pathHead=(NodeList*)malloc(sizeof(NodeList));
-        // pathHead->next=NULL;
-        // NodeList* pPath=pathHead;
         printf("node=%d,dis=%lf\n",id,0.0);
         double length=0;
 
@@ -296,6 +262,7 @@ void pathToDijkstra(long id,double disTo[], Marked marked[],Edge edgeTo[],NodeLi
         printf("path length:%lf\n",length);
         showNode(pPath);
         showPath(pPath);
+        printf("The output file 'path.txt' is generated.\n");
     }
     else{
         printf("there is no path\n");
@@ -303,10 +270,9 @@ void pathToDijkstra(long id,double disTo[], Marked marked[],Edge edgeTo[],NodeLi
     }
 }
 
+// integration of dfs algorithm
 void findRoute(long start, long end, NodeList* nodeHead, AdjacencyList* pAdjacent){
-
     NodeList* pNode=nodeHead;
-
     //initialize the marks
     Marked marks[3941]={0,-1};
     int edgeTo[3941];
@@ -315,14 +281,11 @@ void findRoute(long start, long end, NodeList* nodeHead, AdjacencyList* pAdjacen
 
     // mark sure thr first argument in dfs() is the same as the third argument in pathTo()
     dfs(start,marks,pAdjacent,edgeTo);
-    NodeList* pPath=pathTo(end,marks,start,edgeTo,pNode);
-
-    showNode(pPath);
-    showPath(pPath);
+    pathTo(end,marks,start,edgeTo,pNode);
 }
 
+// intergration of Dijkstra Algorithm
 void findShortestRoute(long start, long end,NodeList* nodeHead,AdjacencyList* pAdjacent){
-
     NodeList* pNode=nodeHead;
 
     Marked marks[3941]={0,-1};
@@ -349,6 +312,4 @@ void findShortestRoute(long start, long end,NodeList* nodeHead,AdjacencyList* pA
 
     dijkstra(pq,disTo,start,marks,pAdjacent,edgeToDijkstra);
     pathToDijkstra(end,disTo,marks,edgeToDijkstra,nodeHead);
-
-    
 }

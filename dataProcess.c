@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include"datastructure.h"
 
+// process the input data
 int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
     long nodeAmount=0,wayAmount=0,linkAmount=0,geomAmount=0;
     FILE *fp = NULL;
@@ -172,7 +173,6 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             tempGeom.id=atoi(tempStr);
 
             //get the nodelist of current geom
-
             NodeList* geomNodeList=(NodeList*)malloc(sizeof(NodeList));
             geomNodeList->next=NULL;
             NodeList* pointer=geomNodeList;
@@ -180,7 +180,6 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
             char tempChar[650];
             char tempResult[25];
 
-            //printf("%s\n",buff);
             strcpy(iterChar,strstr(buff,"node="));
             while(1){
                 if(strstr(iterChar+1,"node=")!=NULL){
@@ -226,6 +225,31 @@ int input(NodeList* pNode,WayList* pWay,LinkList* pLink,GeomList* pGeom){
     fclose(fp);
     return 0;
 }
+
+// initialize the marks
+void initializeMark(Marked marks[],NodeList* nodeHead){
+    for(int i=0;i<3941;i++){
+       marks[i].val=-1;
+    }
+    // fill up the id for the structure marks 
+    NodeList* pNode = nodeHead;
+    int num=0;
+        pNode=pNode->next;
+        while(pNode!=NULL){ 
+            marks[num].id=pNode->spot.id;
+            pNode=pNode->next;
+            num++;
+        }
+}
+
+// for a given node id, output the index in marks
+int getIndex(long id,Marked marks[]){
+        for(int i=0;i<3941;i++){
+            if(marks[i].id==id)
+                return i;
+        }
+        return -1;
+    }
 
 //test for go through all the <node>
 void showNode(NodeList* nodeHead){
@@ -318,6 +342,7 @@ void showEdgeList(EdgeList* edgeHead){
     printf("the amount of the edges is %d\n",amount);
 }
 
+//  test for go through all the queue
 showQueue(Queue* pq){
 	NodeList* nodeHead=pq->head;
     nodeHead=nodeHead->next;
@@ -328,6 +353,7 @@ showQueue(Queue* pq){
     printf("in total %d nodes\n",pq->n);
 }
 
+// get the node with the input node id
 Node getNode(long id,NodeList* nodeHead){
     nodeHead=nodeHead->next;
     while(nodeHead!=NULL){ 
@@ -338,6 +364,7 @@ Node getNode(long id,NodeList* nodeHead){
     }
 }
 
+// genertate the adjacent list for each node
 void adjacent(NodeList* pNode,LinkList* linkHead,AdjacencyList* adjacentHead){
 
     AdjacencyList* pAdjacent=adjacentHead;

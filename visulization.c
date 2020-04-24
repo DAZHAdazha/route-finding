@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include"datastructure.h"
+// visualization of original map with the given data
 void showOriginalMap(NodeList* nodeHead,LinkList* nodeLink){
 
     NodeList* pNode=nodeHead;
@@ -38,7 +39,6 @@ void showOriginalMap(NodeList* nodeHead,LinkList* nodeLink){
         pNode=pNode->next;
         while(pNode!=NULL){ 
             if(pNode->spot.id==x){
-
                 fprintf(fp,"%lf %lf\n",(pNode->spot.lon-xmin)/xdif*1000,(pNode->spot.lat-ymin)/ydif*1000);
                 count++;
             }
@@ -58,6 +58,7 @@ void showOriginalMap(NodeList* nodeHead,LinkList* nodeLink){
     fclose(fp);
 }
 
+// visualization of path with given node list
 void showPath(NodeList* nodeHead){
     FILE *fp = NULL;
     fp = fopen("./path.txt", "w+");
