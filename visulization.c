@@ -56,6 +56,8 @@ void showOriginalMap(NodeList* nodeHead,LinkList* nodeLink){
         pLink=pLink->next;
     }
     fclose(fp);
+    printf("The output file 'originalMap.txt' is generated.\n");
+    return;
 }
 
 // visualization of path with given node list
@@ -72,4 +74,5 @@ void showPath(NodeList* nodeHead){
         pNode=pNode->next;
     }
     fclose(fp);
+    return;
 }
