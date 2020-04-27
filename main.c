@@ -32,20 +32,8 @@ int main(void){
     adjacentHead->next=NULL;
     AdjacencyList* pAdjacent=adjacentHead;
 
-
     // initialize and storing the input from the file
-    input(pNode,pWay,pLink,pGeom);
-    
-    // show the original map with given data
-    // showOriginalMap(pNode,pLink);
-    
-    // showNode(pNode);
-    // showWay(pWay);
-    // showLink(pLink);
-    // showGeom(pGeom);
-    // adjacent(pNode,pLink,pAdjacent);
-    // showAdjacentList(pAdjacent);
-    
+    input(pNode,pWay,pLink,pGeom);   
     char choice;
     long start,end;
     while(1){
@@ -90,7 +78,9 @@ int main(void){
                 printf("d.Show all the <Geoms>\n");
                 printf("e.Show all the <Adjacent Lists>\n");
                 printf("f.Show the original map\n");
-                printf("g.Go to the menu\n");
+                printf("g.Run the visualization test\n");
+                printf("h.Run the data process test\n");
+                printf("i.Go to the menu\n");
                 scanf("%c",&option);
                 if(option=='a'){
                     showNode(pNode);
@@ -112,6 +102,12 @@ int main(void){
                     showOriginalMap(pNode,pLink);
                 }
                 else if(option=='g'){
+                    visualizationTest();
+                }
+                else if(option=='h'){
+                    dataProcessTest();
+                }
+                else if(option=='i'){
                     break;
                 }
                 else{
@@ -128,5 +124,10 @@ int main(void){
             printf("Invalid choice, please try again.\n");
         }
     }
+    destroyNodeList(pNode);
+    destroyLinkList(pLink);
+    destroyWayList(pWay);
+    destroyGeomList(pGeom);
+    destroyAdjacentList(pAdjacent);
     return 0;
 }

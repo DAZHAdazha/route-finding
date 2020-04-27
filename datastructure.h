@@ -21,6 +21,11 @@ typedef struct way{
     NodeList* head;
 }Way;
 
+typedef struct geom{
+    long id;
+    NodeList* head;
+}Geom;
+
 typedef struct wayList{
     Way currentWay;
     struct wayList* next;
@@ -30,11 +35,6 @@ typedef struct linkList{
     Link currentLink;
     struct linkList* next;
 }LinkList;
-
-typedef struct geom{
-    long id;
-    NodeList* head;
-}Geom;
 
 typedef struct geomList{
     Geom currentGeom;

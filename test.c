@@ -1,3 +1,6 @@
+#ifndef flag	// use macro to avoid repeating declaration
+#define flag 1
+
 #include<stdio.h>
 #include<stdlib.h>
 #include"datastructure.h"
@@ -110,3 +113,5 @@ void showQueue(Queue* pq){
     printf("in total %d nodes\n",pq->n);
     return;
 }
+
+#endif

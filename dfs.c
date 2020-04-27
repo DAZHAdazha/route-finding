@@ -52,10 +52,8 @@ void pathTo(long id,Marked marked[],long start,int edgeTo[],NodeList* nodeHead){
         printf("%d ",marked[i].id);
         NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
         temp->next=NULL;
-
         Node tempNode;
         tempNode.id=marked[i].id;
-
         NodeList* pNode=nodeHead;
         pNode=pNode->next;
         while(pNode!=NULL){ 
@@ -69,14 +67,11 @@ void pathTo(long id,Marked marked[],long start,int edgeTo[],NodeList* nodeHead){
         pPath->next=temp; 
         pPath=pPath->next;
     }
-        
     printf("%d\n",start);
     NodeList* temp=(NodeList*)malloc(sizeof(NodeList));
     temp->next=NULL;
-
     Node tempNode;
     tempNode.id=start;
-
     NodeList* pNode=nodeHead;
     pNode=pNode->next;
     while(pNode!=NULL){ 
@@ -101,9 +96,7 @@ void findRoute(long start, long end, NodeList* nodeHead, AdjacencyList* pAdjacen
     //initialize the marks
     Marked marks[3941]={0,-1};
     int edgeTo[3941];
-    
     initializeMark(marks,pNode);
-
     // mark sure thr first argument in dfs() is the same as the third argument in pathTo()
     dfs(start,marks,pAdjacent,edgeTo);
     pathTo(end,marks,start,edgeTo,pNode);
