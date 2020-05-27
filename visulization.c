@@ -32,6 +32,7 @@ void showOriginalMap(NodeList* nodeHead,LinkList* nodeLink){
         y=pLink->currentLink.nodey;
         NodeList* pNode=nodeHead;
         pNode=pNode->next;
+		// process the map data in rational proportion to show a more clear map.
         while(pNode!=NULL){ 
             if(pNode->spot.id==x){
                 fprintf(fp,"%lf %lf\n",(pNode->spot.lon-xmin)/xdif*1000,(pNode->spot.lat-ymin)/ydif*1000);

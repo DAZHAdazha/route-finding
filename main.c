@@ -53,7 +53,7 @@ int main(void){
             // generate adjacent list
             adjacent(pNode,pLink,pAdjacent);
             // find the route by given two nodes, implemented by dfs
-            findRoute(start,end,pNode,pAdjacent);
+            findRoute(start,end,pNode,pAdjacent,pLink);
             printf("--------------------------------------------------------\n");
         }
         else if(choice=='b'){

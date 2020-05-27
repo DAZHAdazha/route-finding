@@ -160,7 +160,6 @@ void pathToDijkstra(long id,double disTo[], Marked marked[],Edge edgeTo[],NodeLi
             pHead=pHead->next;
         }
         printf("path length:%lf\n",length);
-        showNode(pPath);
         showPath(pPath);
         printf("The output file 'path.txt' is generated.\n");
     }
